@@ -25,82 +25,82 @@ from apmecclient.i18n import _
 from apmecclient.apmec import v1_0 as apmecV10
 
 
-_VNFD = "vnfd"
+_MEAD = "mead"
 
 
-class ListVNFD(apmecV10.ListCommand):
-    """List VNFD that belong to a given tenant."""
+class ListMEAD(apmecV10.ListCommand):
+    """List MEAD that belong to a given tenant."""
 
-    resource = _VNFD
+    resource = _MEAD
     list_columns = ['id', 'name', 'template_source', 'description']
 
     def get_parser(self, prog_name):
-        parser = super(ListVNFD, self).get_parser(prog_name)
+        parser = super(ListMEAD, self).get_parser(prog_name)
         parser.add_argument(
             '--template-source',
-            help=_("List VNFD with specified template source. Available \
+            help=_("List MEAD with specified template source. Available \
                    options are 'onboarded' (default), 'inline' or 'all'"),
             action='store',
             default='onboarded')
         return parser
 
     def args2search_opts(self, parsed_args):
-        search_opts = super(ListVNFD, self).args2search_opts(parsed_args)
+        search_opts = super(ListMEAD, self).args2search_opts(parsed_args)
         template_source = parsed_args.template_source
         if parsed_args.template_source:
             search_opts.update({'template_source': template_source})
         return search_opts
 
 
-class ShowVNFD(apmecV10.ShowCommand):
-    """Show information of a given VNFD."""
+class ShowMEAD(apmecV10.ShowCommand):
+    """Show information of a given MEAD."""
 
-    resource = _VNFD
+    resource = _MEAD
 
 
-class CreateVNFD(apmecV10.CreateCommand):
-    """Create a VNFD."""
+class CreateMEAD(apmecV10.CreateCommand):
+    """Create a MEAD."""
 
-    resource = _VNFD
+    resource = _MEAD
     remove_output_fields = ["attributes"]
 
     def add_known_arguments(self, parser):
-        parser.add_argument('--vnfd-file', help=_('Specify VNFD file'))
+        parser.add_argument('--mead-file', help=_('Specify MEAD file'))
         parser.add_argument(
             'name', metavar='NAME',
-            help=_('Set a name for the VNFD'))
+            help=_('Set a name for the MEAD'))
         parser.add_argument(
             '--description',
-            help=_('Set a description for the VNFD'))
+            help=_('Set a description for the MEAD'))
 
     def args2body(self, parsed_args):
         body = {self.resource: {}}
-        vnfd = None
-        if not parsed_args.vnfd_file:
-            raise exceptions.InvalidInput("Invalid input for vnfd file")
-        with open(parsed_args.vnfd_file) as f:
-            vnfd = f.read()
+        mead = None
+        if not parsed_args.mead_file:
+            raise exceptions.InvalidInput("Invalid input for mead file")
+        with open(parsed_args.mead_file) as f:
+            mead = f.read()
             try:
-                vnfd = yaml.load(vnfd, Loader=yaml.SafeLoader)
+                mead = yaml.load(mead, Loader=yaml.SafeLoader)
             except yaml.YAMLError as e:
                 raise exceptions.InvalidInput(e)
-            if not vnfd:
-                raise exceptions.InvalidInput("vnfd file is empty")
-            body[self.resource]['attributes'] = {'vnfd': vnfd}
+            if not mead:
+                raise exceptions.InvalidInput("mead file is empty")
+            body[self.resource]['attributes'] = {'mead': mead}
         apmecV10.update_dict(parsed_args, body[self.resource],
                               ['tenant_id', 'name', 'description'])
         return body
 
 
-class DeleteVNFD(apmecV10.DeleteCommand):
-    """Delete given VNFD(s)."""
-    resource = _VNFD
+class DeleteMEAD(apmecV10.DeleteCommand):
+    """Delete given MEAD(s)."""
+    resource = _MEAD
 
 
-class ShowTemplateVNFD(apmecV10.ShowCommand):
-    """Show template of a given VNFD."""
+class ShowTemplateMEAD(apmecV10.ShowCommand):
+    """Show template of a given MEAD."""
 
-    resource = _VNFD
+    resource = _MEAD
 
     def run(self, parsed_args):
         self.log.debug('run(%s)', parsed_args)
@@ -109,7 +109,7 @@ class ShowTemplateVNFD(apmecV10.ShowCommand):
         try:
             attributes_index = data[0].index('attributes')
             attributes_json = data[1][attributes_index]
-            template = jsonutils.loads(attributes_json).get('vnfd', None)
+            template = jsonutils.loads(attributes_json).get('mead', None)
         except (IndexError, TypeError, ValueError) as e:
             self.log.debug('Data handling error: %s', str(e))
-        print(template or _('Unable to display VNFD template!'))
+        print(template or _('Unable to display MEAD template!'))

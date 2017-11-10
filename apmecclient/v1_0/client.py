@@ -334,12 +334,12 @@ class Client(ClientBase):
     extensions_path = "/extensions"
     extension_path = "/extensions/%s"
 
-    vnfds_path = '/vnfds'
-    vnfd_path = '/vnfds/%s'
-    vnfs_path = '/vnfs'
-    vnf_path = '/vnfs/%s'
-    vnf_scale_path = '/vnfs/%s/actions'
-    vnf_resources_path = '/vnfs/%s/resources'
+    meads_path = '/meads'
+    mead_path = '/meads/%s'
+    meas_path = '/meas'
+    mea_path = '/meas/%s'
+    mea_scale_path = '/meas/%s/actions'
+    mea_resources_path = '/meas/%s/resources'
 
     vims_path = '/vims'
     vim_path = '/vims/%s'
@@ -361,72 +361,72 @@ class Client(ClientBase):
         """Fetch a list of all exts on server side."""
         return self.get(self.extension_path % ext_alias, params=_params)
 
-    _VNFD = "vnfd"
+    _MEAD = "mead"
 
     @APIParamsCall
-    def list_vnfds(self, retrieve_all=True, **_params):
-        vnfds_dict = self.list(self._VNFD + 's',
-                               self.vnfds_path,
+    def list_meads(self, retrieve_all=True, **_params):
+        meads_dict = self.list(self._MEAD + 's',
+                               self.meads_path,
                                retrieve_all,
                                **_params)
-        for vnfd in vnfds_dict['vnfds']:
-            if vnfd.get('description'):
-                if len(vnfd['description']) > DEFAULT_DESC_LENGTH:
-                    vnfd['description'] = \
-                        vnfd['description'][:DEFAULT_DESC_LENGTH]
-                    vnfd['description'] += '...'
-        return vnfds_dict
+        for mead in meads_dict['meads']:
+            if mead.get('description'):
+                if len(mead['description']) > DEFAULT_DESC_LENGTH:
+                    mead['description'] = \
+                        mead['description'][:DEFAULT_DESC_LENGTH]
+                    mead['description'] += '...'
+        return meads_dict
 
     @APIParamsCall
-    def show_vnfd(self, vnfd, **_params):
-        return self.get(self.vnfd_path % vnfd,
+    def show_mead(self, mead, **_params):
+        return self.get(self.mead_path % mead,
                         params=_params)
 
     @APIParamsCall
-    def create_vnfd(self, body):
-        body[self._VNFD]['service_types'] = [{'service_type': 'vnfd'}]
-        return self.post(self.vnfds_path, body)
+    def create_mead(self, body):
+        body[self._MEAD]['service_types'] = [{'service_type': 'mead'}]
+        return self.post(self.meads_path, body)
 
     @APIParamsCall
-    def delete_vnfd(self, vnfd):
-        return self.delete(self.vnfd_path % vnfd)
+    def delete_mead(self, mead):
+        return self.delete(self.mead_path % mead)
 
     @APIParamsCall
-    def list_vnfs(self, retrieve_all=True, **_params):
-        vnfs = self.list('vnfs', self.vnfs_path, retrieve_all, **_params)
-        for vnf in vnfs['vnfs']:
-            error_reason = vnf.get('error_reason', None)
+    def list_meas(self, retrieve_all=True, **_params):
+        meas = self.list('meas', self.meas_path, retrieve_all, **_params)
+        for mea in meas['meas']:
+            error_reason = mea.get('error_reason', None)
             if error_reason and \
                 len(error_reason) > DEFAULT_ERROR_REASON_LENGTH:
-                vnf['error_reason'] = error_reason[
+                mea['error_reason'] = error_reason[
                     :DEFAULT_ERROR_REASON_LENGTH]
-                vnf['error_reason'] += '...'
-        return vnfs
+                mea['error_reason'] += '...'
+        return meas
 
     @APIParamsCall
-    def show_vnf(self, vnf, **_params):
-        return self.get(self.vnf_path % vnf, params=_params)
+    def show_mea(self, mea, **_params):
+        return self.get(self.mea_path % mea, params=_params)
 
     @APIParamsCall
-    def create_vnf(self, body):
-        return self.post(self.vnfs_path, body=body)
+    def create_mea(self, body):
+        return self.post(self.meas_path, body=body)
 
     @APIParamsCall
-    def delete_vnf(self, vnf):
-        return self.delete(self.vnf_path % vnf)
+    def delete_mea(self, mea):
+        return self.delete(self.mea_path % mea)
 
     @APIParamsCall
-    def update_vnf(self, vnf, body):
-        return self.put(self.vnf_path % vnf, body=body)
+    def update_mea(self, mea, body):
+        return self.put(self.mea_path % mea, body=body)
 
     @APIParamsCall
-    def list_vnf_resources(self, vnf, retrieve_all=True, **_params):
-        return self.list('resources', self.vnf_resources_path % vnf,
+    def list_mea_resources(self, mea, retrieve_all=True, **_params):
+        return self.list('resources', self.mea_resources_path % mea,
                          retrieve_all, **_params)
 
     @APIParamsCall
-    def scale_vnf(self, vnf, body=None):
-        return self.post(self.vnf_scale_path % vnf, body=body)
+    def scale_mea(self, mea, body=None):
+        return self.post(self.mea_scale_path % mea, body=body)
 
     @APIParamsCall
     def show_vim(self, vim, **_params):
@@ -457,22 +457,22 @@ class Client(ClientBase):
         return events
 
     @APIParamsCall
-    def list_vnf_events(self, retrieve_all=True, **_params):
-        _params['resource_type'] = 'vnf'
+    def list_mea_events(self, retrieve_all=True, **_params):
+        _params['resource_type'] = 'mea'
         events = self.list('events', self.events_path, retrieve_all,
                            **_params)
-        vnf_events = {}
-        vnf_events['vnf_events'] = events['events']
-        return vnf_events
+        mea_events = {}
+        mea_events['mea_events'] = events['events']
+        return mea_events
 
     @APIParamsCall
-    def list_vnfd_events(self, retrieve_all=True, **_params):
-        _params['resource_type'] = 'vnfd'
+    def list_mead_events(self, retrieve_all=True, **_params):
+        _params['resource_type'] = 'mead'
         events = self.list('events', self.events_path, retrieve_all,
                            **_params)
-        vnfd_events = {}
-        vnfd_events['vnfd_events'] = events['events']
-        return vnfd_events
+        mead_events = {}
+        mead_events['mead_events'] = events['events']
+        return mead_events
 
     @APIParamsCall
     def list_vim_events(self, retrieve_all=True, **_params):

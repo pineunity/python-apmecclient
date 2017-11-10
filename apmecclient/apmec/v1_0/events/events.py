@@ -71,16 +71,16 @@ class ListResourceEvents(ListEventsBase):
         return search_opts
 
 
-class ListVNFEvents(ListEventsBase):
-    """List events of VNFs."""
+class ListMEAEvents(ListEventsBase):
+    """List events of MEAs."""
 
-    resource = "vnf_event"
+    resource = "mea_event"
 
 
-class ListVNFDEvents(ListEventsBase):
-    """List events of VNFDs."""
+class ListMEADEvents(ListEventsBase):
+    """List events of MEADs."""
 
-    resource = "vnfd_event"
+    resource = "mead_event"
 
 
 class ListVIMEvents(ListEventsBase):

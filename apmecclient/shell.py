@@ -105,21 +105,21 @@ COMMAND_V1 = {
     'ext-show': extension.ShowExt,
 
     # MANO lingo
-    'vnfd-create': mead.CreateVNFD,
-    'vnfd-delete': mead.DeleteVNFD,
-    'vnfd-list': mead.ListVNFD,
-    'vnfd-show': mead.ShowVNFD,
-    'vnfd-template-show': mead.ShowTemplateVNFD,
+    'mead-create': mead.CreateMEAD,
+    'mead-delete': mead.DeleteMEAD,
+    'mead-list': mead.ListMEAD,
+    'mead-show': mead.ShowMEAD,
+    'mead-template-show': mead.ShowTemplateMEAD,
 
-    'vnf-create': mea.CreateVNF,
-    'vnf-update': mea.UpdateVNF,
-    'vnf-delete': mea.DeleteVNF,
-    'vnf-list': mea.ListVNF,
-    'vnf-show': mea.ShowVNF,
-    'vnf-scale': mea.ScaleVNF,
-    'vnf-resource-list': mea.ListVNFResources,
-    # 'vnf-config-create'
-    # 'vnf-config-push'
+    'mea-create': mea.CreateMEA,
+    'mea-update': mea.UpdateMEA,
+    'mea-delete': mea.DeleteMEA,
+    'mea-list': mea.ListMEA,
+    'mea-show': mea.ShowMEA,
+    'mea-scale': mea.ScaleMEA,
+    'mea-resource-list': mea.ListMEAResources,
+    # 'mea-config-create'
+    # 'mea-config-push'
 
     'vim-register': vim.CreateVIM,
     'vim-update': vim.UpdateVIM,
@@ -129,9 +129,9 @@ COMMAND_V1 = {
 
     'events-list': events.ListResourceEvents,
     'event-show': events.ShowEvent,
-    'vnf-events-list': events.ListVNFEvents,
+    'mea-events-list': events.ListMEAEvents,
     'vim-events-list': events.ListVIMEvents,
-    'vnfd-events-list': events.ListVNFDEvents,
+    'mead-events-list': events.ListMEADEvents,
 
 }
 

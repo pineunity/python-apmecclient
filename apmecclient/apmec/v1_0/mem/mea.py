@@ -22,60 +22,60 @@ from apmecclient.i18n import _
 from apmecclient.apmec import v1_0 as apmecV10
 
 
-_VNF = 'vnf'
+_MEA = 'mea'
 _RESOURCE = 'resource'
 
 
-class ListVNF(apmecV10.ListCommand):
-    """List VNF that belong to a given tenant."""
+class ListMEA(apmecV10.ListCommand):
+    """List MEA that belong to a given tenant."""
 
-    resource = _VNF
+    resource = _MEA
     list_columns = ['id', 'name', 'mgmt_url', 'status',
-                    'vim_id', 'vnfd_id']
+                    'vim_id', 'mead_id']
 
 
-class ShowVNF(apmecV10.ShowCommand):
-    """Show information of a given VNF."""
+class ShowMEA(apmecV10.ShowCommand):
+    """Show information of a given MEA."""
 
-    resource = _VNF
+    resource = _MEA
 
 
-class CreateVNF(apmecV10.CreateCommand):
-    """Create a VNF."""
+class CreateMEA(apmecV10.CreateCommand):
+    """Create a MEA."""
 
-    resource = _VNF
+    resource = _MEA
     remove_output_fields = ["attributes"]
 
     def add_known_arguments(self, parser):
         parser.add_argument(
             'name', metavar='NAME',
-            help=_('Set a name for the VNF'))
+            help=_('Set a name for the MEA'))
         parser.add_argument(
             '--description',
-            help=_('Set description for the VNF'))
-        vnfd_group = parser.add_mutually_exclusive_group(required=True)
-        vnfd_group.add_argument(
-            '--vnfd-id',
-            help=_('VNFD ID to use as template to create VNF'))
-        vnfd_group.add_argument(
-            '--vnfd-name',
-            help=_('VNFD Name to use as template to create VNF'))
-        vnfd_group.add_argument(
-            '--vnfd-template',
-            help=_("VNFD file to create VNF"))
+            help=_('Set description for the MEA'))
+        mead_group = parser.add_mutually_exclusive_group(required=True)
+        mead_group.add_argument(
+            '--mead-id',
+            help=_('MEAD ID to use as template to create MEA'))
+        mead_group.add_argument(
+            '--mead-name',
+            help=_('MEAD Name to use as template to create MEA'))
+        mead_group.add_argument(
+            '--mead-template',
+            help=_("MEAD file to create MEA"))
         vim_group = parser.add_mutually_exclusive_group()
         vim_group.add_argument(
             '--vim-id',
-            help=_('VIM ID to use to create VNF on the specified VIM'))
+            help=_('VIM ID to use to create MEA on the specified VIM'))
         vim_group.add_argument(
             '--vim-name',
-            help=_('VIM name to use to create VNF on the specified VIM'))
+            help=_('VIM name to use to create MEA on the specified VIM'))
         parser.add_argument(
             '--vim-region-name',
-            help=_('VIM Region to use to create VNF on the specified VIM'))
+            help=_('VIM Region to use to create MEA on the specified VIM'))
         parser.add_argument(
             '--config-file',
-            help=_('YAML file with VNF configuration'))
+            help=_('YAML file with MEA configuration'))
         parser.add_argument(
             '--param-file',
             help=_('Specify parameter yaml file'))
@@ -108,17 +108,17 @@ class CreateVNF(apmecV10.CreateCommand):
                                                               parsed_args.
                                                               vim_name)
                 parsed_args.vim_id = _id
-        if parsed_args.vnfd_name:
+        if parsed_args.mead_name:
                 _id = apmecV10.find_resourceid_by_name_or_id(apmec_client,
-                                                              'vnfd',
+                                                              'mead',
                                                               parsed_args.
-                                                              vnfd_name)
-                parsed_args.vnfd_id = _id
-        elif parsed_args.vnfd_template:
-            with open(parsed_args.vnfd_template) as f:
+                                                              mead_name)
+                parsed_args.mead_id = _id
+        elif parsed_args.mead_template:
+            with open(parsed_args.mead_template) as f:
                 template = f.read()
             try:
-                args['vnfd_template'] = yaml.load(
+                args['mead_template'] = yaml.load(
                     template, Loader=yaml.SafeLoader)
             except yaml.YAMLError as e:
                 raise exceptions.InvalidInput(e)
@@ -133,19 +133,19 @@ class CreateVNF(apmecV10.CreateCommand):
                 raise exceptions.InvalidInput(e)
         apmecV10.update_dict(parsed_args, body[self.resource],
                               ['tenant_id', 'name', 'description',
-                               'vnfd_id', 'vim_id'])
+                               'mead_id', 'vim_id'])
         return body
 
 
-class UpdateVNF(apmecV10.UpdateCommand):
-    """Update a given VNF."""
+class UpdateMEA(apmecV10.UpdateCommand):
+    """Update a given MEA."""
 
-    resource = _VNF
+    resource = _MEA
 
     def add_known_arguments(self, parser):
         parser.add_argument(
             '--config-file',
-            help=_('YAML file with VNF configuration'))
+            help=_('YAML file with MEA configuration'))
         parser.add_argument(
             '--config',
             help=_('Specify config yaml data'))
@@ -175,26 +175,26 @@ class UpdateVNF(apmecV10.UpdateCommand):
         return body
 
 
-class DeleteVNF(apmecV10.DeleteCommand):
-    """Delete given VNF(s)."""
+class DeleteMEA(apmecV10.DeleteCommand):
+    """Delete given MEA(s)."""
 
-    resource = _VNF
-    deleted_msg = {'vnf': 'delete initiated'}
+    resource = _MEA
+    deleted_msg = {'mea': 'delete initiated'}
 
 
-class ListVNFResources(apmecV10.ListCommand):
-    """List resources of a VNF like VDU, CP, etc."""
+class ListMEAResources(apmecV10.ListCommand):
+    """List resources of a MEA like VDU, CP, etc."""
 
     list_columns = ['name', 'id', 'type']
     allow_names = True
-    resource = _VNF
+    resource = _MEA
 
     def get_id(self):
         if self.resource:
             return self.resource.upper()
 
     def get_parser(self, prog_name):
-        parser = super(ListVNFResources, self).get_parser(prog_name)
+        parser = super(ListMEAResources, self).get_parser(prog_name)
         if self.allow_names:
             help_str = _('ID or name of %s to look up')
         else:
@@ -244,20 +244,20 @@ class ListVNFResources(apmecV10.ListCommand):
                 dirs = dirs[:len(keys)]
             if dirs:
                 search_opts.update({'sort_dir': dirs})
-        obj_lister = getattr(apmec_client, "list_vnf_resources")
+        obj_lister = getattr(apmec_client, "list_mea_resources")
         data = obj_lister(id, **search_opts)
         return data.get('resources', [])
 
 
-class ScaleVNF(apmecV10.ApmecCommand):
-    """Scale a VNF."""
+class ScaleMEA(apmecV10.ApmecCommand):
+    """Scale a MEA."""
 
     api = 'mec-orchestration'
     resource = None
     log = None
 
     def get_parser(self, prog_name):
-        parser = super(ScaleVNF, self).get_parser(prog_name)
+        parser = super(ScaleMEA, self).get_parser(prog_name)
         self.add_known_arguments(parser)
         return parser
 
@@ -266,38 +266,38 @@ class ScaleVNF(apmecV10.ApmecCommand):
         apmec_client.format = parsed_args.request_format
         body = self.args2body(parsed_args)
         obj_creator = getattr(apmec_client,
-                              "scale_vnf")
-        obj_creator(body["scale"].pop('vnf_id'), body)
+                              "scale_mea")
+        obj_creator(body["scale"].pop('mea_id'), body)
 
     def add_known_arguments(self, parser):
-        vnf_group = parser.add_mutually_exclusive_group(required=True)
-        vnf_group.add_argument(
-            '--vnf-id',
-            help=_('VNF ID'))
-        vnf_group.add_argument(
-            '--vnf-name',
-            help=_('VNF name'))
+        mea_group = parser.add_mutually_exclusive_group(required=True)
+        mea_group.add_argument(
+            '--mea-id',
+            help=_('MEA ID'))
+        mea_group.add_argument(
+            '--mea-name',
+            help=_('MEA name'))
         parser.add_argument(
             '--scaling-policy-name',
-            help=_('VNF policy name used to scale'))
+            help=_('MEA policy name used to scale'))
         parser.add_argument(
             '--scaling-type',
-            help=_('VNF scaling type, it could be either "out" or "in"'))
+            help=_('MEA scaling type, it could be either "out" or "in"'))
 
     def args2body(self, parsed_args):
         args = {}
         body = {"scale": args}
 
-        if parsed_args.vnf_name:
+        if parsed_args.mea_name:
             apmec_client = self.get_client()
             apmec_client.format = parsed_args.request_format
             _id = apmecV10.find_resourceid_by_name_or_id(apmec_client,
-                                                          'vnf',
+                                                          'mea',
                                                           parsed_args.
-                                                          vnf_name)
-            parsed_args.vnf_id = _id
+                                                          mea_name)
+            parsed_args.mea_id = _id
 
-        args['vnf_id'] = parsed_args.vnf_id
+        args['mea_id'] = parsed_args.mea_id
         args['type'] = parsed_args.scaling_type
         args['policy'] = parsed_args.scaling_policy_name
 

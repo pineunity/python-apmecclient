@@ -28,16 +28,16 @@ ENDURL = 'localurl'
 class CLITestV10EventJSON(test_cli10.CLITestV10Base):
     _EVT_RESOURCE = 'event'
     _EVT_RESOURCES = _EVT_RESOURCE + 's'
-    _VNF_EVT_RESOURCE = "vnf_event"
-    _VNF_EVT_RESOURCES = _VNF_EVT_RESOURCE + 's'
-    _VNFD_EVT_RESOURCE = "vnfd_event"
-    _VNFD_EVT_RESOURCES = _VNFD_EVT_RESOURCE + 's'
+    _MEA_EVT_RESOURCE = "mea_event"
+    _MEA_EVT_RESOURCES = _MEA_EVT_RESOURCE + 's'
+    _MEAD_EVT_RESOURCE = "mead_event"
+    _MEAD_EVT_RESOURCES = _MEAD_EVT_RESOURCE + 's'
     _VIM_EVT_RESOURCE = "vim_event"
     _VIM_EVT_RESOURCES = _VIM_EVT_RESOURCE + 's'
 
     def setUp(self):
-        plurals = {'events': 'event', 'vnf_events': 'vnf_event',
-                   'vnfd_events': 'vnfd_event', 'vim_events': 'vim_event'}
+        plurals = {'events': 'event', 'mea_events': 'mea_event',
+                   'mead_events': 'mead_event', 'vim_events': 'vim_event'}
         super(CLITestV10EventJSON, self).setUp(plurals=plurals)
 
     def test_list_events(self):
@@ -50,17 +50,17 @@ class CLITestV10EventJSON(test_cli10.CLITestV10Base):
         self._test_show_resource(self._EVT_RESOURCE, cmd, self.test_id, args,
                                  ['id'])
 
-    def notest_list_vnf_events(self):
+    def notest_list_mea_events(self):
         # TODO(vishwanathj): Need to enhance _test_list_resources()
         # for supporting filters to get this test working
-        cmd = events.ListVNFEvents(test_cli10.MyApp(sys.stdout), None)
-        self._test_list_resources(self._VNF_EVT_RESOURCES, cmd, True)
+        cmd = events.ListMEAEvents(test_cli10.MyApp(sys.stdout), None)
+        self._test_list_resources(self._MEA_EVT_RESOURCES, cmd, True)
 
-    def notest_list_vnfd_events(self):
+    def notest_list_mead_events(self):
         # TODO(vishwanathj): Need to enhance _test_list_resources()
         # for supporting filters to get this test working
-        cmd = events.ListVNFDEvents(test_cli10.MyApp(sys.stdout), None)
-        self._test_list_resources(self._VNFD_EVT_RESOURCES, cmd, True)
+        cmd = events.ListMEADEvents(test_cli10.MyApp(sys.stdout), None)
+        self._test_list_resources(self._MEAD_EVT_RESOURCES, cmd, True)
 
     def notest_list_vim_events(self):
         # TODO(vishwanathj): Need to enhance _test_list_resources()

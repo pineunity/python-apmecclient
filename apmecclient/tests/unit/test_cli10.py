@@ -217,7 +217,7 @@ class CLITestV10Base(testtools.TestCase):
                               tags=None, admin_state_up=True, extra_body=None,
                               **kwargs):
         mock_get.return_value = self.client
-        non_admin_status_resources = ['vnfd', 'vnf', 'vim']
+        non_admin_status_resources = ['mead', 'mea', 'vim']
         if (resource in non_admin_status_resources):
             body = {resource: {}, }
         else:
@@ -603,7 +603,7 @@ class CLITestV10Base(testtools.TestCase):
 
     @mock.patch.object(ApmecCommand, 'get_client')
     def _test_delete_resource(self, resource, cmd, myid, args, mock_get):
-        deleted_msg = {'vnf': 'delete initiated'}
+        deleted_msg = {'mea': 'delete initiated'}
         mock_get.return_value = self.client
         path = getattr(self.client, resource + "_path")
         with mock.patch.object(self.client.httpclient, 'request') as mock_req:

@@ -23,71 +23,71 @@ from apmecclient.apmec.v1_0.mem import mead
 from apmecclient.tests.unit import test_cli10
 
 
-class CLITestV10VmVNFDJSON(test_cli10.CLITestV10Base):
-    _RESOURCE = 'vnfd'
-    _RESOURCES = 'vnfds'
+class CLITestV10VmMEADJSON(test_cli10.CLITestV10Base):
+    _RESOURCE = 'mead'
+    _RESOURCES = 'meads'
 
     def setUp(self):
-        plurals = {'vnfds': 'vnfd'}
-        super(CLITestV10VmVNFDJSON, self).setUp(plurals=plurals)
+        plurals = {'meads': 'mead'}
+        super(CLITestV10VmMEADJSON, self).setUp(plurals=plurals)
 
-    @patch("apmecclient.apmec.v1_0.mem.vnfd.open",
-           side_effect=mock_open(read_data="vnfd"),
+    @patch("apmecclient.apmec.v1_0.mem.mead.open",
+           side_effect=mock_open(read_data="mead"),
            create=True)
-    def test_create_vnfd_all_params(self, mo):
-        cmd = mead.CreateVNFD(
+    def test_create_mead_all_params(self, mo):
+        cmd = mead.CreateMEAD(
             test_cli10.MyApp(sys.stdout), None)
         my_id = 'my-id'
         name = 'my-name'
-        attr_key = 'vnfd'
-        attr_val = 'vnfd'
+        attr_key = 'mead'
+        attr_val = 'mead'
         args = [
             name,
-            '--vnfd-file', 'vnfd-file'
+            '--mead-file', 'mead-file'
         ]
         position_names = ['name']
         position_values = [name]
         extra_body = {
-            'service_types': [{'service_type': 'vnfd'}],
+            'service_types': [{'service_type': 'mead'}],
             'attributes': {attr_key: attr_val},
         }
         self._test_create_resource(self._RESOURCE, cmd, None, my_id,
                                    args, position_names, position_values,
                                    extra_body=extra_body)
 
-    @patch("apmecclient.apmec.v1_0.mem.vnfd.open",
-           side_effect=mock_open(read_data="vnfd"),
+    @patch("apmecclient.apmec.v1_0.mem.mead.open",
+           side_effect=mock_open(read_data="mead"),
            create=True)
-    def test_create_vnfd_with_mandatory_params(self, mo):
-        cmd = mead.CreateVNFD(
+    def test_create_mead_with_mandatory_params(self, mo):
+        cmd = mead.CreateMEAD(
             test_cli10.MyApp(sys.stdout), None)
         name = 'my_name'
         my_id = 'my-id'
-        args = [name, '--vnfd-file', 'vnfd-file', ]
+        args = [name, '--mead-file', 'mead-file', ]
         position_names = ['name']
         position_values = [name]
         extra_body = {
-            'service_types': [{'service_type': 'vnfd'}],
-            'attributes': {'vnfd': 'vnfd'}
+            'service_types': [{'service_type': 'mead'}],
+            'attributes': {'mead': 'mead'}
         }
         self._test_create_resource(self._RESOURCE, cmd, name, my_id,
                                    args, position_names, position_values,
                                    extra_body=extra_body)
 
-    @patch("apmecclient.apmec.v1_0.mem.vnfd.open",
+    @patch("apmecclient.apmec.v1_0.mem.mead.open",
            side_effect=mock_open(read_data=""),
            create=True)
-    def test_create_vnfd_with_empty_file(self, mo):
-        cmd = mead.CreateVNFD(
+    def test_create_mead_with_empty_file(self, mo):
+        cmd = mead.CreateMEAD(
             test_cli10.MyApp(sys.stdout), None)
         name = 'my_name'
         my_id = 'my-id'
-        args = [name, '--vnfd-file', 'vnfd-file', ]
+        args = [name, '--mead-file', 'mead-file', ]
         position_names = ['name']
         position_values = [name]
         extra_body = {
-            'service_types': [{'service_type': 'vnfd'}],
-            'attributes': {'vnfd': 'vnfd'}
+            'service_types': [{'service_type': 'mead'}],
+            'attributes': {'mead': 'mead'}
         }
         err = None
         try:
@@ -98,49 +98,49 @@ class CLITestV10VmVNFDJSON(test_cli10.CLITestV10Base):
             err = True
         self.assertEqual(True, err)
 
-    def test_list_vnfds(self):
-        cmd = mead.ListVNFD(test_cli10.MyApp(sys.stdout), None)
+    def test_list_meads(self):
+        cmd = mead.ListMEAD(test_cli10.MyApp(sys.stdout), None)
         self._test_list_resources(self._RESOURCES, cmd, True,
                                   template_source='onboarded')
 
-    def test_list_inline_vnfds(self):
-        cmd = mead.ListVNFD(test_cli10.MyApp(sys.stdout), None)
+    def test_list_inline_meads(self):
+        cmd = mead.ListMEAD(test_cli10.MyApp(sys.stdout), None)
         self._test_list_resources(self._RESOURCES, cmd, True,
                                   template_source='inline')
 
-    def test_list_all_vnfds(self):
-        cmd = mead.ListVNFD(test_cli10.MyApp(sys.stdout), None)
+    def test_list_all_meads(self):
+        cmd = mead.ListMEAD(test_cli10.MyApp(sys.stdout), None)
         self._test_list_resources(self._RESOURCES, cmd, True,
                                   template_source='all')
 
-    def test_list_vnfds_pagenation(self):
-        cmd = mead.ListVNFD(test_cli10.MyApp(sys.stdout), None)
+    def test_list_meads_pagenation(self):
+        cmd = mead.ListMEAD(test_cli10.MyApp(sys.stdout), None)
         print(cmd)
         self._test_list_resources(self._RESOURCES, cmd, True,
                                   template_source='onboarded')
 
-    def test_show_vnfd_id(self):
-        cmd = mead.ShowVNFD(test_cli10.MyApp(sys.stdout), None)
+    def test_show_mead_id(self):
+        cmd = mead.ShowMEAD(test_cli10.MyApp(sys.stdout), None)
         args = ['--fields', 'id', self.test_id]
         self._test_show_resource(self._RESOURCE, cmd, self.test_id, args,
                                  ['id'])
 
-    def test_show_vnfd_id_name(self):
-        cmd = mead.ShowVNFD(test_cli10.MyApp(sys.stdout), None)
+    def test_show_mead_id_name(self):
+        cmd = mead.ShowMEAD(test_cli10.MyApp(sys.stdout), None)
         args = ['--fields', 'id', '--fields', 'name', self.test_id]
         self._test_show_resource(self._RESOURCE, cmd, self.test_id,
                                  args, ['id', 'name'])
 
-    def test_delete_vnfd(self):
-        cmd = mead.DeleteVNFD(
+    def test_delete_mead(self):
+        cmd = mead.DeleteMEAD(
             test_cli10.MyApp(sys.stdout), None)
         my_id = 'my-id'
         args = [my_id]
         self._test_delete_resource(self._RESOURCE, cmd, my_id, args)
 
-    def test_multi_delete_vnfd(self):
-        cmd = mead.DeleteVNFD(
+    def test_multi_delete_mead(self):
+        cmd = mead.DeleteMEAD(
             test_cli10.MyApp(sys.stdout), None)
-        vnfd_ids = 'my-id1 my-id2 my-id3'
-        args = [vnfd_ids]
-        self._test_delete_resource(self._RESOURCE, cmd, vnfd_ids, args)
+        mead_ids = 'my-id1 my-id2 my-id3'
+        args = [mead_ids]
+        self._test_delete_resource(self._RESOURCE, cmd, mead_ids, args)

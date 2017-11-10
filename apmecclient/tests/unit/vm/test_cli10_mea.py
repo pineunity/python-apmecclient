@@ -30,15 +30,15 @@ TOKEN = 'testtoken'
 ENDURL = 'localurl'
 
 
-class CLITestV10VmVNFJSON(test_cli10.CLITestV10Base):
-    _RESOURCE = 'vnf'
-    _RESOURCES = 'vnfs'
-    _VNF_RESOURCES = 'vnf_resources'
+class CLITestV10VmMEAJSON(test_cli10.CLITestV10Base):
+    _RESOURCE = 'mea'
+    _RESOURCES = 'meas'
+    _MEA_RESOURCES = 'mea_resources'
 
     def setUp(self):
-        plurals = {'vnfs': 'vnf',
+        plurals = {'meas': 'mea',
                    'resources': 'resource'}
-        super(CLITestV10VmVNFJSON, self).setUp(plurals=plurals)
+        super(CLITestV10VmMEAJSON, self).setUp(plurals=plurals)
 
     @mock.patch.object(ApmecCommand, 'get_client')
     def _test_create_resource(self, resource, cmd, name, myid, args,
@@ -46,7 +46,7 @@ class CLITestV10VmVNFJSON(test_cli10.CLITestV10Base):
                               tenant_id=None, tags=None, admin_state_up=True,
                               extra_body=None, **kwargs):
         mock_get.return_value = self.client
-        non_admin_status_resources = ['vnfd', 'vnf']
+        non_admin_status_resources = ['mead', 'mea']
         if (resource in non_admin_status_resources):
             body = {resource: {}, }
         else:
@@ -80,7 +80,7 @@ class CLITestV10VmVNFJSON(test_cli10.CLITestV10Base):
         with mock.patch.object(self.client.httpclient, 'request') as mock_req:
             mock_req.return_value = (test_cli10.MyResp(200), resstr)
             args.extend(['--request-format', self.format])
-            args.extend(['--vnfd-id', 'vnfd'])
+            args.extend(['--mead-id', 'mead'])
             cmd_parser = cmd.get_parser('create_' + resource)
             shell.run_command(cmd, cmd_parser, args)
             mock_req.assert_called_once_with(
@@ -89,11 +89,11 @@ class CLITestV10VmVNFJSON(test_cli10.CLITestV10Base):
                 headers=test_utils.ContainsKeyValue('X-Auth-Token', TOKEN))
         mock_get.assert_any_call()
 
-    def test_create_vnf_all_params(self):
-        cmd = mea.CreateVNF(test_cli10.MyApp(sys.stdout), None)
+    def test_create_mea_all_params(self):
+        cmd = mea.CreateMEA(test_cli10.MyApp(sys.stdout), None)
         name = 'my_name'
         my_id = 'my-id'
-        vnfd_id = 'vnfd'
+        mead_id = 'mead'
         vim_id = 'vim_id'
         description = 'my-description'
         region_name = 'region'
@@ -102,21 +102,21 @@ class CLITestV10VmVNFJSON(test_cli10.CLITestV10Base):
 
         args = [
             name,
-            '--vnfd-id', vnfd_id,
+            '--mead-id', mead_id,
             '--vim-id', vim_id,
             '--description', description,
             '--vim-region-name', region_name,
             '--%s' % key, value]
         position_names = [
             'name',
-            'vnfd_id',
+            'mead_id',
             'vim_id',
             'description',
             'attributes',
         ]
         position_values = [
             name,
-            vnfd_id,
+            mead_id,
             vim_id,
             description,
             {},
@@ -127,59 +127,59 @@ class CLITestV10VmVNFJSON(test_cli10.CLITestV10Base):
                                    args, position_names, position_values,
                                    extra_body=extra_body)
 
-    def test_create_vnf_with_vnfd_id(self):
-        cmd = mea.CreateVNF(test_cli10.MyApp(sys.stdout), None)
+    def test_create_mea_with_mead_id(self):
+        cmd = mea.CreateMEA(test_cli10.MyApp(sys.stdout), None)
         name = 'my_name'
         my_id = 'my-id'
-        vnfd_id = 'vnfd'
+        mead_id = 'mead'
         args = [
             name,
-            '--vnfd-id', vnfd_id,
+            '--mead-id', mead_id,
         ]
-        position_names = ['name', 'vnfd_id', 'attributes']
-        position_values = [name, vnfd_id, {}]
+        position_names = ['name', 'mead_id', 'attributes']
+        position_values = [name, mead_id, {}]
         self._test_create_resource(self._RESOURCE, cmd, name, my_id,
                                    args, position_names, position_values)
 
-    def test_create_vnf_with_description_param(self):
-        cmd = mea.CreateVNF(test_cli10.MyApp(sys.stdout), None)
+    def test_create_mea_with_description_param(self):
+        cmd = mea.CreateMEA(test_cli10.MyApp(sys.stdout), None)
         name = 'my_name'
         my_id = 'my-id'
-        vnfd_id = 'vnfd'
+        mead_id = 'mead'
         description = 'my-description'
         args = [
             name,
-            '--vnfd-id', vnfd_id,
+            '--mead-id', mead_id,
             '--description', description,
         ]
-        position_names = ['name', 'vnfd_id', 'description',
+        position_names = ['name', 'mead_id', 'description',
                           'attributes']
-        position_values = [name, vnfd_id, description, {}]
+        position_values = [name, mead_id, description, {}]
         self._test_create_resource(self._RESOURCE, cmd, None, my_id,
                                    args, position_names, position_values)
 
-    def test_list_vnfs(self):
-        cmd = mea.ListVNF(test_cli10.MyApp(sys.stdout), None)
+    def test_list_meas(self):
+        cmd = mea.ListMEA(test_cli10.MyApp(sys.stdout), None)
         self._test_list_resources(self._RESOURCES, cmd, True)
 
-    def test_list_vnfs_pagenation(self):
-        cmd = mea.ListVNF(test_cli10.MyApp(sys.stdout), None)
+    def test_list_meas_pagenation(self):
+        cmd = mea.ListMEA(test_cli10.MyApp(sys.stdout), None)
         self._test_list_resources(self._RESOURCES, cmd, True)
 
-    def test_show_vnf_id(self):
-        cmd = mea.ShowVNF(test_cli10.MyApp(sys.stdout), None)
+    def test_show_mea_id(self):
+        cmd = mea.ShowMEA(test_cli10.MyApp(sys.stdout), None)
         args = ['--fields', 'id', self.test_id]
         self._test_show_resource(self._RESOURCE, cmd, self.test_id, args,
                                  ['id'])
 
-    def test_show_vnf_id_name(self):
-        cmd = mea.ShowVNF(test_cli10.MyApp(sys.stdout), None)
+    def test_show_mea_id_name(self):
+        cmd = mea.ShowMEA(test_cli10.MyApp(sys.stdout), None)
         args = ['--fields', 'id', '--fields', 'name', self.test_id]
         self._test_show_resource(self._RESOURCE, cmd, self.test_id,
                                  args, ['id', 'name'])
 
-    def test_update_vnf(self):
-        cmd = mea.UpdateVNF(test_cli10.MyApp(sys.stdout), None)
+    def test_update_mea(self):
+        cmd = mea.UpdateMEA(test_cli10.MyApp(sys.stdout), None)
         my_id = 'my-id'
         key = 'new_key'
         value = 'new-value'
@@ -187,18 +187,18 @@ class CLITestV10VmVNFJSON(test_cli10.CLITestV10Base):
                                    [my_id, '--%s' % key, value],
                                    {key: value})
 
-    def test_delete_vnf(self):
-        cmd = mea.DeleteVNF(test_cli10.MyApp(sys.stdout), None)
+    def test_delete_mea(self):
+        cmd = mea.DeleteMEA(test_cli10.MyApp(sys.stdout), None)
         my_id = 'my-id'
         args = [my_id]
         self._test_delete_resource(self._RESOURCE, cmd, my_id, args)
 
-    def test_list_vnf_resources(self):
-        cmd = mea.ListVNFResources(test_cli10.MyApp(sys.stdout), None)
+    def test_list_mea_resources(self):
+        cmd = mea.ListMEAResources(test_cli10.MyApp(sys.stdout), None)
         base_args = [self.test_id]
         response = [{'name': 'CP11', 'id': 'id1', 'type': 'NeutronPort'},
                     {'name': 'CP12', 'id': 'id2', 'type': 'NeutronPort'}]
-        val = self._test_list_sub_resources(self._VNF_RESOURCES, 'resources',
+        val = self._test_list_sub_resources(self._MEA_RESOURCES, 'resources',
                                             cmd, self.test_id,
                                             response_contents=response,
                                             detail=True, base_args=base_args)
@@ -206,8 +206,8 @@ class CLITestV10VmVNFJSON(test_cli10.CLITestV10Base):
         self.assertIn('NeutronPort', val)
         self.assertIn('CP11', val)
 
-    def test_multi_delete_vnf(self):
-        cmd = mea.DeleteVNF(test_cli10.MyApp(sys.stdout), None)
-        vnf_ids = 'vnf1 vnf2 vnf3'
-        args = [vnf_ids]
-        self._test_delete_resource(self._RESOURCE, cmd, vnf_ids, args)
+    def test_multi_delete_mea(self):
+        cmd = mea.DeleteMEA(test_cli10.MyApp(sys.stdout), None)
+        mea_ids = 'mea1 mea2 mea3'
+        args = [mea_ids]
+        self._test_delete_resource(self._RESOURCE, cmd, mea_ids, args)
