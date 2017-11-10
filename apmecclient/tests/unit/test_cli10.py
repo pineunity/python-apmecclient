@@ -217,7 +217,7 @@ class CLITestV10Base(testtools.TestCase):
                               tags=None, admin_state_up=True, extra_body=None,
                               **kwargs):
         mock_get.return_value = self.client
-        non_admin_status_resources = ['vnfd', 'vnf', 'vim', 'vnffgd', 'vnffg']
+        non_admin_status_resources = ['vnfd', 'vnf', 'vim']
         if (resource in non_admin_status_resources):
             body = {resource: {}, }
         else:
