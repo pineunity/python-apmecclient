@@ -36,7 +36,7 @@ DEFAULT_TENANT_ID = 'tenant_id'
 DEFAULT_TENANT_NAME = 'tenant_name'
 DEFAULT_AUTH_URL = 'http://127.0.0.1:5000/v1.0/'
 DEFAULT_TOKEN = '3bcc3d3a03f44e3d8377f9247b0ad155'
-DEFAULT_URL = 'http://apmec.example.org:9890/'
+DEFAULT_URL = 'http://apmec.example.org:9896/'
 DEFAULT_API_VERSION = '1.0'
 
 
