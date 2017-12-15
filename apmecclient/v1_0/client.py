@@ -347,6 +347,11 @@ class Client(ClientBase):
     events_path = '/events'
     event_path = '/events/%s'
 
+    mesds_path = '/mesds'
+    mesd_path = '/mesds/%s'
+
+    mess_path = '/mess'
+    mes_path = '/mess/%s'
 
     # API has no way to report plurals, so we have to hard code them
     # EXTED_PLURALS = {}
@@ -362,6 +367,7 @@ class Client(ClientBase):
         return self.get(self.extension_path % ext_alias, params=_params)
 
     _MEAD = "mead"
+    _NSD = "mesd"
 
     @APIParamsCall
     def list_meads(self, retrieve_all=True, **_params):
@@ -486,3 +492,53 @@ class Client(ClientBase):
     @APIParamsCall
     def show_event(self, event_id, **_params):
         return self.get(self.event_path % event_id, params=_params)
+
+    @APIParamsCall
+    def list_mesds(self, retrieve_all=True, **_params):
+        mesds_dict = self.list(self._NSD + 's',
+                              self.mesds_path,
+                              retrieve_all,
+                              **_params)
+        for mesd in mesds_dict['mesds']:
+            if 'description' in mesd.keys() and \
+                            len(mesd['description']) > DEFAULT_DESC_LENGTH:
+                mesd['description'] = mesd['description'][:DEFAULT_DESC_LENGTH]
+                mesd['description'] += '...'
+        return mesds_dict
+
+    @APIParamsCall
+    def show_mesd(self, mesd, **_params):
+        return self.get(self.mesd_path % mesd,
+                        params=_params)
+
+    @APIParamsCall
+    def create_mesd(self, body):
+        return self.post(self.mesds_path, body)
+
+    @APIParamsCall
+    def delete_mesd(self, mesd):
+        return self.delete(self.mesd_path % mesd)
+
+    @APIParamsCall
+    def list_mess(self, retrieve_all=True, **_params):
+        mess = self.list('mess', self.mess_path, retrieve_all, **_params)
+        for mes in mess['mess']:
+            error_reason = mes.get('error_reason', None)
+            if error_reason and \
+                            len(error_reason) > DEFAULT_ERROR_REASON_LENGTH:
+                mes['error_reason'] = error_reason[
+                                     :DEFAULT_ERROR_REASON_LENGTH]
+                mes['error_reason'] += '...'
+        return mess
+
+    @APIParamsCall
+    def show_mes(self, mes, **_params):
+        return self.get(self.mes_path % mes, params=_params)
+
+    @APIParamsCall
+    def create_mes(self, body):
+        return self.post(self.mess_path, body=body)
+
+    @APIParamsCall
+    def delete_mes(self, mes):
+        return self.delete(self.mes_path % mes)

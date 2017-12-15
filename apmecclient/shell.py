@@ -47,6 +47,8 @@ from apmecclient.common import utils
 from apmecclient.i18n import _
 from apmecclient.apmec.v1_0.events import events
 from apmecclient.apmec.v1_0 import extension
+from tackerclient.tacker.v1_0.nfvo import mes
+from tackerclient.tacker.v1_0.nfvo import mesd
 from apmecclient.apmec.v1_0.meo import vim
 from apmecclient.apmec.v1_0.mem import mea
 from apmecclient.apmec.v1_0.mem import mead
@@ -132,6 +134,17 @@ COMMAND_V1 = {
     'mea-events-list': events.ListMEAEvents,
     'vim-events-list': events.ListVIMEvents,
     'mead-events-list': events.ListMEADEvents,
+
+    'mesd-create': mesd.CreateMESD,
+    'mesd-list': mesd.ListMESD,
+    'mesd-delete': mesd.DeleteMESD,
+    'mesd-show': mesd.ShowMESD,
+    'mesd-template-show': mesd.ShowTemplateMESD,
+
+    'mes-create': mes.CreateMES,
+    'mes-list': mes.ListMES,
+    'mes-delete': mes.DeleteMES,
+    'mes-show': mes.ShowMES,
 
 }
 
