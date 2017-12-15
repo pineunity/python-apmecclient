@@ -367,7 +367,7 @@ class Client(ClientBase):
         return self.get(self.extension_path % ext_alias, params=_params)
 
     _MEAD = "mead"
-    _NSD = "mesd"
+    _MESD = "mesd"
 
     @APIParamsCall
     def list_meads(self, retrieve_all=True, **_params):
@@ -495,7 +495,7 @@ class Client(ClientBase):
 
     @APIParamsCall
     def list_mesds(self, retrieve_all=True, **_params):
-        mesds_dict = self.list(self._NSD + 's',
+        mesds_dict = self.list(self._MESD + 's',
                               self.mesds_path,
                               retrieve_all,
                               **_params)
