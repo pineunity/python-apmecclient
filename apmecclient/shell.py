@@ -47,8 +47,8 @@ from apmecclient.common import utils
 from apmecclient.i18n import _
 from apmecclient.apmec.v1_0.events import events
 from apmecclient.apmec.v1_0 import extension
-from tackerclient.tacker.v1_0.nfvo import mes
-from tackerclient.tacker.v1_0.nfvo import mesd
+from apmecclient.apmec.v1_0.meo import mes
+from apmecclient.apmec.v1_0.meo import mesd
 from apmecclient.apmec.v1_0.meo import vim
 from apmecclient.apmec.v1_0.mem import mea
 from apmecclient.apmec.v1_0.mem import mead
