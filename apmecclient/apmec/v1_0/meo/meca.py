@@ -2,11 +2,11 @@
 # not use this file except in compliance with the License. You may obtain
 # a copy of the License at
 #
-#      http://www.apache.org/licenses/LICEMCAE-2.0
+#      http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-# WARRANTIES OR CONDITIOMCA OF ANY KIND, either express or implied. See the
+# WARRANTIES OR CONDITION OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
 
@@ -17,56 +17,56 @@ from apmecclient.i18n import _
 from apmecclient.apmec import v1_0 as apmecV10
 
 
-_MCA = 'mca'
+_MECA = 'meca'
 _RESOURCE = 'resource'
 
 
-class ListMCA(apmecV10.ListCommand):
-    """List MCA that belong to a given tenant."""
+class ListMECA(apmecV10.ListCommand):
+    """List MECA that belong to a given tenant."""
 
-    resource = _MCA
-    list_columns = ['id', 'name', 'mcad_id', 'mgmt_urls', 'status']
-
-
-class ShowMCA(apmecV10.ShowCommand):
-    """Show information of a given MCA."""
-
-    resource = _MCA
+    resource = _MECA
+    list_columns = ['id', 'name', 'mecad_id', 'mgmt_urls', 'status']
 
 
-class CreateMCA(apmecV10.CreateCommand):
-    """Create a MCA."""
+class ShowMECA(apmecV10.ShowCommand):
+    """Show information of a given MECA."""
 
-    resource = _MCA
+    resource = _MECA
+
+
+class CreateMECA(apmecV10.CreateCommand):
+    """Create a MECA."""
+
+    resource = _MECA
     remove_output_fields = ["attributes"]
 
     def add_known_arguments(self, parser):
         parser.add_argument(
             'name', metavar='NAME',
-            help=_('Set a name for the MCA'))
+            help=_('Set a name for the MECA'))
         parser.add_argument(
             '--description',
-            help=_('Set description for the MCA'))
-        mcad_group = parser.add_mutually_exclusive_group(required=True)
-        mcad_group.add_argument(
-            '--mcad-id',
-            help=_('MCAD ID to use as template to create MCA'))
-        mcad_group.add_argument(
-            '--mcad-template',
-            help=_('MCAD file to create MCA'))
-        mcad_group.add_argument(
-            '--mcad-name',
-            help=_('MCAD name to use as template to create MCA'))
+            help=_('Set description for the MECA'))
+        mecad_group = parser.add_mutually_exclusive_group(required=True)
+        mecad_group.add_argument(
+            '--mecad-id',
+            help=_('MECAD ID to use as template to create MECA'))
+        mecad_group.add_argument(
+            '--mecad-template',
+            help=_('MECAD file to create MECA'))
+        mecad_group.add_argument(
+            '--mecad-name',
+            help=_('MECAD name to use as template to create MECA'))
         vim_group = parser.add_mutually_exclusive_group()
         vim_group.add_argument(
             '--vim-id',
-            help=_('VIM ID to use to create MCA on the specified VIM'))
+            help=_('VIM ID to use to create MECA on the specified VIM'))
         vim_group.add_argument(
             '--vim-name',
-            help=_('VIM name to use to create MCA on the specified VIM'))
+            help=_('VIM name to use to create MECA on the specified VIM'))
         parser.add_argument(
             '--vim-region-name',
-            help=_('VIM Region to use to create MCA on the specified VIM'))
+            help=_('VIM Region to use to create MECA on the specified VIM'))
         parser.add_argument(
             '--param-file',
             help=_('Specify parameter yaml file'))
@@ -86,22 +86,22 @@ class CreateMCA(apmecV10.CreateCommand):
                                                               parsed_args.
                                                               vim_name)
                 parsed_args.vim_id = _id
-        if parsed_args.mcad_name:
+        if parsed_args.mecad_name:
                 _id = apmecV10.find_resourceid_by_name_or_id(apmec_client,
-                                                              'mcad',
+                                                              'mecad',
                                                               parsed_args.
-                                                              mcad_name)
-                parsed_args.mcad_id = _id
-        elif parsed_args.mcad_template:
-            with open(parsed_args.mcad_template) as f:
+                                                              mecad_name)
+                parsed_args.mecad_id = _id
+        elif parsed_args.mecad_template:
+            with open(parsed_args.mecad_template) as f:
                 template = f.read()
             try:
-                args['mcad_template'] = yaml.load(
+                args['mecad_template'] = yaml.load(
                     template, Loader=yaml.SafeLoader)
             except yaml.YAMLError as e:
                 raise exceptions.InvalidInput(e)
-            if not args['mcad_template']:
-                raise exceptions.InvalidInput('The mcad file is empty')
+            if not args['mecad_template']:
+                raise exceptions.InvalidInput('The mecad file is empty')
 
         if parsed_args.param_file:
             with open(parsed_args.param_file) as f:
@@ -113,12 +113,12 @@ class CreateMCA(apmecV10.CreateCommand):
                 raise exceptions.InvalidInput(e)
         apmecV10.update_dict(parsed_args, body[self.resource],
                               ['tenant_id', 'name', 'description',
-                               'mcad_id', 'vim_id'])
+                               'mecad_id', 'vim_id'])
         return body
 
 
-class DeleteMCA(apmecV10.DeleteCommand):
-    """Delete given MCA(s)."""
+class DeleteMECA(apmecV10.DeleteCommand):
+    """Delete given MECA(s)."""
 
-    resource = _MCA
-    deleted_msg = {'mca': 'delete initiated'}
+    resource = _MECA
+    deleted_msg = {'meca': 'delete initiated'}
