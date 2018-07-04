@@ -122,3 +122,38 @@ class DeleteMES(apmecV10.DeleteCommand):
 
     resource = _MES
     deleted_msg = {'mes': 'delete initiated'}
+
+
+class UpdateMES(apmecV10.UpdateCommand):
+    """Update a given MES."""
+
+    resource = _MES
+
+    def add_known_arguments(self, parser):
+        parser.add_argument(
+            '--mesd-template',
+            help=_('MESD file to update MES')
+        )
+
+    def args2body(self, parsed_args):
+        args = {}
+        body = {self.resource: args}
+
+        apmec_client = self.get_client()
+        apmec_client.format = parsed_args.request_format
+
+        if parsed_args.mesd_template:
+            with open(parsed_args.nsd_template) as f:
+                template = f.read()
+            try:
+                args['mesd_template'] = yaml.load(
+                    template, Loader=yaml.SafeLoader)
+            except yaml.YAMLError as e:
+                raise exceptions.InvalidInput(e)
+            if not args['mesd_template']:
+                raise exceptions.InvalidInput('The mesd template is empty')
+
+        apmecV10.update_dict(parsed_args, body[self.resource],
+                              ['tenant_id'])
+        return body
+

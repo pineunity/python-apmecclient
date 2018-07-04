@@ -551,6 +551,10 @@ class Client(ClientBase):
         return self.delete(self.mes_path % mes)
 
     @APIParamsCall
+    def update_mes(self, mes, body):
+        return self.put(self.mes_path % mes, body=body)
+
+    @APIParamsCall
     def list_mecads(self, retrieve_all=True, **_params):
         mecads_dict = self.list(self._MECAD + 's',
                                self.mecads_path,

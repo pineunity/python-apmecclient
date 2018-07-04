@@ -147,6 +147,7 @@ COMMAND_V1 = {
     'mes-list': mes.ListMES,
     'mes-delete': mes.DeleteMES,
     'mes-show': mes.ShowMES,
+    'mes_update': mes.UpdateMES,
 
     'mecad-create': mecad.CreateMECAD,
     'mecad-list': mecad.ListMECAD,
