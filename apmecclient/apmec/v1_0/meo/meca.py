@@ -142,8 +142,8 @@ class UpdateMECA(apmecV10.UpdateCommand):
         apmec_client = self.get_client()
         apmec_client.format = parsed_args.request_format
 
-        if parsed_args.mesd_template:
-            with open(parsed_args.meca_template) as f:
+        if parsed_args.mecad_template:
+            with open(parsed_args.mecad_template) as f:
                 template = f.read()
             try:
                 args['mecad_template'] = yaml.load(
