@@ -603,3 +603,7 @@ class Client(ClientBase):
     @APIParamsCall
     def delete_meca(self, meca):
         return self.delete(self.meca_path % meca)
+
+    @APIParamsCall
+    def update_meca(self, meca, body):
+        return self.put(self.meca_path % meca, body=body)

@@ -159,6 +159,7 @@ COMMAND_V1 = {
     'meca-list': meca.ListMECA,
     'meca-delete': meca.DeleteMECA,
     'meca-show': meca.ShowMECA,
+    'meca-update': meca.UpdateMECA
 
 }
 

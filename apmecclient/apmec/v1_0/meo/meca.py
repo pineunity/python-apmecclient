@@ -122,3 +122,38 @@ class DeleteMECA(apmecV10.DeleteCommand):
 
     resource = _MECA
     deleted_msg = {'meca': 'delete initiated'}
+
+
+class UpdateMECA(apmecV10.UpdateCommand):
+    """Update a given MES."""
+
+    resource = _MECA
+
+    def add_known_arguments(self, parser):
+        parser.add_argument(
+            '--mecad-template',
+            help=_('MECAD file to update MECA')
+        )
+
+    def args2body(self, parsed_args):
+        args = {}
+        body = {self.resource: args}
+
+        apmec_client = self.get_client()
+        apmec_client.format = parsed_args.request_format
+
+        if parsed_args.mesd_template:
+            with open(parsed_args.nsd_template) as f:
+                template = f.read()
+            try:
+                args['mecad_template'] = yaml.load(
+                    template, Loader=yaml.SafeLoader)
+            except yaml.YAMLError as e:
+                raise exceptions.InvalidInput(e)
+            if not args['mecad_template']:
+                raise exceptions.InvalidInput('The mecad template is empty')
+
+        apmecV10.update_dict(parsed_args, body[self.resource],
+                              ['tenant_id'])
+        return body
+
